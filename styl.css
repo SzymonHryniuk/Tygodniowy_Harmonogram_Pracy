@@ -1,0 +1,46 @@
+body {
+    font-family: Arial;
+    background: lightblue;
+}
+
+header {
+    text-align: center;
+    margin: 20px;
+}
+
+.data {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.kalendarz {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 10px;
+}
+
+.dzien {
+    background: white;
+    min-height: 150px;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 0 5px gray;
+}
+
+.dzien h3 {
+    margin: 0;
+    text-align: center;
+    background: #007bff;
+    color: white;
+    border-radius: 6px;
+    padding: 5px;
+}
+
+.zadanie {
+    background: #e3f2fd;
+    margin-top: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 13px;
+}

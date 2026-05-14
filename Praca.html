@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalendarz pracy</title>
+<link rel="stylesheet" href="styl.css">
+
+</head>
+
+<body>
+
+<header>
+    <h1>Kalendarz pracy</h1> 
+</header>
+
+<div class="data">
+
+    <input type="date" id="filter_date">
+    <button onclick="ladujKalendarz()">Filtruj</button>
+    <button onclick="resetFiltra()">Reset</button>
+
+</div>
+
+<div class="kalendarz" id="kalendarz"></div>
+
+<script>
+function ladujKalendarz() {
+
+    let dataFiltr = document.getElementById("filter_date").value;
+
+    let url = "dane.php?cos=1";
+
+    if (dataFiltr) {
+        url += "&data=" + dataFiltr;
+    }
+
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+
+            const kal = document.getElementById("kalendarz");
+            kal.innerHTML = "";
+
+            let grupy = {};
+
+            data.forEach(w => {
+
+                if (!grupy[w.data]) {
+                    grupy[w.data] = [];
+                }
+
+                grupy[w.data].push(w);
+            });
+
+            Object.keys(grupy).forEach(dataKey => {
+
+                let box = document.createElement("div");
+                box.classList.add("dzien");
+
+                box.innerHTML = `
+                    <h3>${dataKey}</h3>
+                `;
+
+                grupy[dataKey].forEach(w => {
+
+                    let el = document.createElement("div");
+                    el.classList.add("zadanie");
+
+                    el.innerHTML = `
+                        
+                        <b>${w.imie} ${w.nazwisko}</b><br>
+                        ${w.godzroz} - ${w.godzzak}<br>
+                        ${w.nazwa}
+                    `;
+
+                    box.appendChild(el);
+                });
+
+                kal.appendChild(box);
+            });
+
+        })
+        .catch(err => console.error("Błąd:", err));
+}
+
+function resetFiltra() {
+    document.getElementById("filter_date").value = "";
+    ladujKalendarz();
+}
+
+ladujKalendarz();
+
+</script>
+
+</body>
+</html>
