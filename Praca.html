@@ -5,31 +5,50 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kalendarz pracy</title>
 <link rel="stylesheet" href="styl.css">
-
 </head>
 
 <body>
 
 <header>
-    <h1>Kalendarz pracy</h1> 
+    <h1 class="rozmiar">Kalendarz pracy</h1> 
 </header>
 
 <div class="data">
+    <div>
+        <input 
+          type="text" 
+          id="filter_date" 
+          placeholder="9999-99-99" 
+          onfocus="(this.type='date')" 
+          onblur="if(!this.value) this.type='text'">
+    </div>
+    <div>
+        <input placeholder="imię" type="text" id="imie" class="imie">
+        <input placeholder="nazwisko" type="text" id="nazwisko" class="nazwisko">
+        <input placeholder="godz. rozp. (HH:MM)" type="time" id="godzroz">
+        <input placeholder="godz. zak. (HH:MM)" type="time" id="godzzak">
+        <input placeholder="nazwa projektu" type="text" id="nazwa_projektu">
+        <input placeholder="opis zadania" type="text" id="opis_zadania">
+    </div>
+</div>
 
-    <input type="date" id="filter_date">
-    <button onclick="ladujKalendarz()">Filtruj</button>
-    <button onclick="resetFiltra()">Reset</button>
-
+<div class="przyciski">
+    <div>
+        <button class="button1" onclick="ladujKalendarz()">Filtruj</button>
+        <button class="button" onclick="resetFiltra()">Reset</button>
+    </div>
+    <div>
+        <button class="button1" onclick="usunWpis()">Usuń</button>
+        <button class="button" onclick="dodajWpis()">Dodaj</button>
+    </div>
 </div>
 
 <div class="kalendarz" id="kalendarz"></div>
 
 <script>
 function ladujKalendarz() {
-
     let dataFiltr = document.getElementById("filter_date").value;
-
-    let url = "dane.php?cos=1";
+    let url = "dane.php?akcja=lista";
 
     if (dataFiltr) {
         url += "&data=" + dataFiltr;
@@ -38,59 +57,117 @@ function ladujKalendarz() {
     fetch(url)
         .then(res => res.json())
         .then(data => {
-
             const kal = document.getElementById("kalendarz");
             kal.innerHTML = "";
 
             let grupy = {};
 
             data.forEach(w => {
-
                 if (!grupy[w.data]) {
                     grupy[w.data] = [];
                 }
-
                 grupy[w.data].push(w);
             });
 
             Object.keys(grupy).forEach(dataKey => {
-
                 let box = document.createElement("div");
                 box.classList.add("dzien");
 
-                box.innerHTML = `
-                    <h3>${dataKey}</h3>
-                `;
+                box.innerHTML = `<h3>${dataKey}</h3>`;
 
                 grupy[dataKey].forEach(w => {
-
                     let el = document.createElement("div");
                     el.classList.add("zadanie");
 
                     el.innerHTML = `
-                        
                         <b>${w.imie} ${w.nazwisko}</b><br>
                         ${w.godzroz} - ${w.godzzak}<br>
-                        ${w.nazwa}
+                        ${w.nazwa}<br>
+                        ${w.opis}
                     `;
-
                     box.appendChild(el);
                 });
 
                 kal.appendChild(box);
             });
-
         })
-        .catch(err => console.error("Błąd:", err));
+        .catch(err => console.error("Błąd ładowania:", err));
+}
+
+function dodajWpis() {
+    let data = document.getElementById("filter_date").value;
+    let imie = document.getElementById("imie").value;
+    let nazwisko = document.getElementById("nazwisko").value;
+    let godzroz = document.getElementById("godzroz").value;
+    let godzzak = document.getElementById("godzzak").value;
+    let nazwa = document.getElementById("nazwa_projektu").value;
+    let opis = document.getElementById("opis_zadania").value;
+
+    if (!data || !imie || !nazwisko || !godzroz || !godzzak || !nazwa) {
+        alert("Wypełnij wszystkie pola oraz wybierz datę, aby dodać wpis!");
+        return;
+    }
+
+    let formData = new FormData();
+    formData.append('data', data);
+    formData.append('imie', imie);
+    formData.append('nazwisko', nazwisko);
+    formData.append('godzroz', godzroz);
+    formData.append('godzzak', godzzak);
+    formData.append('nazwa', nazwa);
+    formData.append('opis', opis);
+
+    fetch("dane.php?akcja=dodaj", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(res => {
+        alert(res.message);
+        if(res.status === 'success') {
+            ladujKalendarz();
+        }
+    })
+    .catch(err => console.error("Błąd dodawania:", err));
+}
+
+function usunWpis() {
+    let data = document.getElementById("filter_date").value;
+    let imie = document.getElementById("imie").value;
+    let nazwisko = document.getElementById("nazwisko").value;
+
+    if (!data || !imie || !nazwisko) {
+        alert("Aby usunąć wpis, musisz podać: Datę, Imię oraz Nazwisko pracownika!");
+        return;
+    }
+
+    let formData = new FormData();
+    formData.append('data', data);
+    formData.append('imie', imie);
+    formData.append('nazwisko', nazwisko);
+
+    fetch("dane.php?akcja=usun", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(res => {
+        alert(res.message);
+        if(res.status === 'success') {
+            ladujKalendarz(); // odśwież widok
+        }
+    })
+    .catch(err => console.error("Błąd usuwania:", err));
 }
 
 function resetFiltra() {
-    document.getElementById("filter_date").value = "";
+    const input = document.getElementById("filter_date");
+    input.value = "";
+    input.type = "text";
     ladujKalendarz();
 }
 
 ladujKalendarz();
-
 </script>
 
 </body>

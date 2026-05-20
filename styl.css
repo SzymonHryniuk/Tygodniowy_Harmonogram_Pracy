@@ -1,28 +1,38 @@
 body {
-    font-family: Arial;
-    background: lightblue;
+
+    background: linear-gradient(135deg, lightblue, blue);
 }
 
 header {
     text-align: center;
-    margin: 20px;
+    
+    
+}
+.imie{
+text-align: center;
+}
+.nazwisko{
+text-align: center;
+}
+.data{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.data {
-    text-align: center;
-    margin-bottom: 15px;
-}
 
 .kalendarz {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
     padding: 10px;
+    min-height: 76.5vh;  
 }
 
 .dzien {
     background: white;
-    min-height: 150px;
+    min-height: 110px;
+    max-height: 110px;
     border-radius: 10px;
     padding: 10px;
     box-shadow: 0 0 5px gray;
@@ -43,4 +53,52 @@ header {
     padding: 5px;
     border-radius: 5px;
     font-size: 13px;
+}
+.button1{
+    background-color: lightblue;
+
+    height: 20px;
+}
+.button{
+    background-color: lightblue;
+    height: 20px;
+}
+.button1:hover {
+  background-color: rgb(98, 98, 252);
+  color: white;
+}
+.button:hover {
+  background-color: rgb(98, 98, 252);
+  color: white;
+}
+.rozmiar{
+    font-size: 50px;
+}
+#filter_date {
+    width: 99px;
+    height: 13px;
+    margin-left: 10px;
+}
+.przyciski{
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.data div {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.data input {
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#filter_date {
+    width: 120px;
+    height: auto;
 }
