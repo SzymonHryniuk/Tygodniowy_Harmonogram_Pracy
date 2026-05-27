@@ -1,41 +1,86 @@
-body {
+html {
+    height: 100%;
+}
 
+body {
     background: linear-gradient(135deg, lightblue, blue);
+    background-attachment: fixed; /* Zapobiega powtarzaniu i dzieleniu gradientu */
+    min-height: 100vh;           /* Rozciąga tło na pełną wysokość ekranu */
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
 
 header {
     text-align: center;
-    
-    
+    padding: 10px;
 }
-.imie{
-text-align: center;
+
+.rozmiar {
+    font-size: 50px;
+    color: white;
 }
-.nazwisko{
-text-align: center;
+
+.data {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    gap: 10px;
 }
-.data{
+
+.data div {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.data input {
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#filter_date {
+    width: 120px;
+}
+
+.przyciski {
+    margin: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
+.button,
+.button1 {
+    background-color: lightblue;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.button:hover,
+.button1:hover {
+    background-color: rgb(98, 98, 252);
+    color: white;
+}
 
 .kalendarz {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 10px;
     padding: 10px;
-    min-height: 76.5vh;  
 }
 
 .dzien {
     background: white;
     min-height: 110px;
-    max-height: 110px;
     border-radius: 10px;
     padding: 10px;
     box-shadow: 0 0 5px gray;
+    overflow-y: auto;
 }
 
 .dzien h3 {
@@ -53,52 +98,40 @@ text-align: center;
     padding: 5px;
     border-radius: 5px;
     font-size: 13px;
-}
-.button1{
-    background-color: lightblue;
-
-    height: 20px;
-}
-.button{
-    background-color: lightblue;
-    height: 20px;
-}
-.button1:hover {
-  background-color: rgb(98, 98, 252);
-  color: white;
-}
-.button:hover {
-  background-color: rgb(98, 98, 252);
-  color: white;
-}
-.rozmiar{
-    font-size: 50px;
-}
-#filter_date {
-    width: 99px;
-    height: 13px;
-    margin-left: 10px;
-}
-.przyciski{
-    margin-left: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    word-wrap: break-word;
 }
 
-.data div {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
+@media (max-width: 768px) {
+    .data {
+        flex-direction: column;
+        align-items: stretch;
+    }
 
-.data input {
-    padding: 4px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
+    .data div {
+        flex-direction: column;
+    }
 
-#filter_date {
-    width: 120px;
-    height: auto;
+    .przyciski {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+
+    .rozmiar {
+        font-size: 32px;
+    }
+
+    .data input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .button,
+    .button1 {
+        width: 100%;
+    }
+
+    .kalendarz {
+        grid-template-columns: 1fr;
+    }
 }
